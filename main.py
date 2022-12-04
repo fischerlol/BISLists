@@ -58,7 +58,7 @@ def main():
     # print_bis_list(death_knight, unholy)
 
     # test
-    #send_data_to_sheet(hunter)
+    # send_data_to_sheet(hunter)
     initial_sheet_setup()
 
 

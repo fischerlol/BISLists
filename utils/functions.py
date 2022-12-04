@@ -510,9 +510,12 @@ def print_bis_list(player_class, player_spec):
 
 def format_cells(worksheet, player_spec, spec_count):
     horizontal = cellFormat(horizontalAlignment='CENTER')
+    format_cell_range(worksheet, 'A2:D19', horizontal)
+    set_column_width(worksheet, 'A', 175)
+
     if spec_count == 3:
         worksheet.merge_cells('A1:D1')
-        set_column_width(worksheet, 'B:D', 190)
+        set_column_width(worksheet, 'B:D', 275)
         format_cell_range(worksheet, 'B2:D2', horizontal)
         format_cell_range(worksheet, 'A1', horizontal)
 
@@ -538,15 +541,15 @@ def format_cells(worksheet, player_spec, spec_count):
 
     if spec_count == 4:
         worksheet.merge_cells('A1:E1')
-        set_column_width(worksheet, 'B:E', 190)
-        format_cell_range(worksheet, 'B2:E2', horizontal)
+        set_column_width(worksheet, 'B:E', 275)
+        format_cell_range(worksheet, 'B2:E19', horizontal)
         format_cell_range(worksheet, 'A1', horizontal)
 
         if player_spec == hunter.title():
-                worksheet.update('A1', [['Hunter Gear']])
-                worksheet.update('A2:E2', [
-                    ['Slot/Spec', 'Beast Mastery', 'Marksmanship', 'Survival Non-Trapweaving',
-                     'Survival Trapweaving']])
+            worksheet.update('A1', [['Hunter Gear']])
+            worksheet.update('A2:E2', [
+                ['Slot/Spec', 'Beast Mastery', 'Marksmanship', 'Survival Non-Trapweaving',
+                 'Survival Trapweaving']])
         if player_spec == druid.title():
             worksheet.update('A1', [['Druid Gear']])
             worksheet.update('A2:E2', [
@@ -560,8 +563,8 @@ def format_cells(worksheet, player_spec, spec_count):
 
     if spec_count == 5:
         worksheet.merge_cells('A1:F1')
-        set_column_width(worksheet, 'B:F', 190)
-        format_cell_range(worksheet, 'B2:F2', horizontal)
+        set_column_width(worksheet, 'B:F', 275)
+        format_cell_range(worksheet, 'B2:F19', horizontal)
         format_cell_range(worksheet, 'A1', horizontal)
 
         if player_spec == warlock.title():
@@ -577,7 +580,162 @@ def format_cells(worksheet, player_spec, spec_count):
                  'Arcane Head as Off-Piece',
                  'Fire', 'Frost']])
 
-    format_cell_range(worksheet, 'A2:A19', horizontal)
+
+def populate_sheet(worksheet, player_class, player_spec):
+    # beast mastery hunter
+    if player_class == hunter.title() and player_spec == beast_mastery:
+        bis_list, sheet_list = [], []
+        player_spec = session.get(hunter_specs[0])
+        player_spec.html.render(timeout=60)
+        player_spec = BeautifulSoup(player_spec.html.html, 'html.parser')
+
+        for x in player_spec.findAll('a', class_="gear-planner-slots-group-slot-link q4"):
+            bis_list.append(x.text)
+        for y in worksheet.get_values('B3:B19'):
+            sheet_list.append(y)
+
+        bis_list.insert(len(bis_list) - 1, '-')
+        illegal_chars = ['[', ']']
+        list_x = ''.join(str(bis_list))
+        list_y = ''.join(str(sheet_list))
+
+        for characters in illegal_chars:
+            list_x = list_x.replace(characters, '')
+            list_y = list_y.replace(characters, '')
+
+        print(list_x)
+        print(list_y)
+        print(len(list_x), len(list_y))
+
+        if len(list_x) == len(list_y):
+            pass
+        if len(list_x) != len(list_y):
+            print('start')
+            worksheet.update('B3:B19',
+                             [[bis_list[0]], [bis_list[1]], [bis_list[2]], [bis_list[3]], [bis_list[4]],
+                              [bis_list[5]], [bis_list[6]], [bis_list[7]], [bis_list[8]], [bis_list[9]],
+                              [bis_list[10]], [bis_list[11]], [bis_list[12]], [bis_list[13]],
+                              [bis_list[14]], [bis_list[15]], [bis_list[16]]])
+
+    # marksmanship hunter
+    if player_class == hunter.title() and player_spec == marksmanship:
+        bis_list, sheet_list = [], []
+        player_spec = session.get(hunter_specs[1])
+        player_spec.html.render(timeout=60)
+        player_spec = BeautifulSoup(player_spec.html.html, 'html.parser')
+
+        for x in player_spec.findAll('a', class_="gear-planner-slots-group-slot-link q4"):
+            bis_list.append(x.text)
+        for y in worksheet.get_values('C3:C19'):
+            sheet_list.append(y)
+
+        bis_list.insert(len(bis_list) - 1, '-')
+        illegal_chars = ['[', ']']
+        list_x = ''.join(str(bis_list))
+        list_y = ''.join(str(sheet_list))
+
+        for characters in illegal_chars:
+            list_x = list_x.replace(characters, '')
+            list_y = list_y.replace(characters, '')
+
+        print(list_x)
+        print(list_y)
+        print(len(list_x), len(list_y))
+
+        if len(list_x) == len(list_y):
+            pass
+        if len(list_x) != len(list_y):
+            print('start')
+            worksheet.update('C3:C19',
+                             [[bis_list[0]], [bis_list[1]], [bis_list[2]], [bis_list[3]], [bis_list[4]],
+                              [bis_list[5]], [bis_list[6]], [bis_list[7]], [bis_list[8]], [bis_list[9]],
+                              [bis_list[10]], [bis_list[11]], [bis_list[12]], [bis_list[13]],
+                              [bis_list[14]], [bis_list[15]], [bis_list[16]]])
+
+    # survival hunter
+    if player_class == hunter.title() and player_spec == survival:
+        bis_list, sheet_list = [], []
+        player_spec = session.get(hunter_specs[2])
+        player_spec.html.render(timeout=60)
+        player_spec = BeautifulSoup(player_spec.html.html, 'html.parser')
+
+        for gear in player_spec.findAll('a', class_="gear-planner-slots-group-slot-link q4"):
+            bis_list.append(gear.text)
+        for gear in worksheet.get_values('D3:D19'):
+            sheet_list.append(gear)
+        for gear in worksheet.get_values('E3:E19'):
+            sheet_list.append(gear)
+
+        bis_list.insert(len(bis_list) - 1, '-')
+        bis_list.insert(len(bis_list) - 18, '-')
+        illegal_chars = ['[', ']']
+
+        list_x = ''.join(str(bis_list))
+        list_y = ''.join(str(sheet_list))
+
+        for characters in illegal_chars:
+            list_x = list_x.replace(characters, '')
+            list_y = list_y.replace(characters, '')
+
+        print(list_x)
+        print(list_y)
+        print(len(list_x), len(list_y))
+
+        if len(list_x) == len(list_y):
+            pass
+        if len(list_x) != len(list_y):
+            print('start')
+            worksheet.update('D3:D19', [[bis_list[0]], [bis_list[1]], [bis_list[2]], [bis_list[3]], [bis_list[4]],
+                                        [bis_list[5]], [bis_list[6]], [bis_list[7]], [bis_list[8]], [bis_list[9]],
+                                        [bis_list[10]], [bis_list[11]], [bis_list[12]], [bis_list[13]],
+                                        [bis_list[14]], [bis_list[15]], [bis_list[16]]])
+            worksheet.update('E3:E19',
+                             [[bis_list[17]], [bis_list[18]], [bis_list[19]], [bis_list[20]], [bis_list[21]],
+                              [bis_list[22]], [bis_list[23]], [bis_list[24]], [bis_list[25]], [bis_list[26]],
+                              [bis_list[27]], [bis_list[28]], [bis_list[29]], [bis_list[30]],
+                              [bis_list[31]], [bis_list[32]], [bis_list[33]]])
+
+    # assassination rogue
+    if player_class == rogue.title() and player_spec == assassination:
+        gear_list = []
+        player_spec = session.get(rogue_specs[0])
+        player_spec.html.render(timeout=60)
+        player_spec = BeautifulSoup(player_spec.html.html, 'html.parser')
+        for gear in player_spec.findAll('a', class_="gear-planner-slots-group-slot-link q4"):
+            gear_list.append(gear.text)
+
+        worksheet.update('B3:B19', [[gear_list[0]], [gear_list[1]], [gear_list[2]], [gear_list[3]], [gear_list[4]],
+                                    [gear_list[5]], [gear_list[6]], [gear_list[7]], [gear_list[8]], [gear_list[9]],
+                                    [gear_list[10]], [gear_list[11]], [gear_list[12]], [gear_list[13]],
+                                    [gear_list[14]], [gear_list[15]], [gear_list[16]]])
+
+    # combat rogue
+    if player_class == rogue.title() and player_spec == combat:
+        gear_list = []
+        player_spec = session.get(rogue_specs[1])
+        player_spec.html.render(timeout=60)
+        player_spec = BeautifulSoup(player_spec.html.html, 'html.parser')
+        for gear in player_spec.findAll('a', class_="gear-planner-slots-group-slot-link q4"):
+            gear_list.append(gear.text)
+
+        worksheet.update('C3:C19', [[gear_list[0]], [gear_list[1]], [gear_list[2]], [gear_list[3]], [gear_list[4]],
+                                    [gear_list[5]], [gear_list[6]], [gear_list[7]], [gear_list[8]], [gear_list[9]],
+                                    [gear_list[10]], [gear_list[11]], [gear_list[12]], [gear_list[13]],
+                                    [gear_list[14]], [gear_list[15]], [gear_list[16]]])
+
+    # subtlety rogue
+    if player_class == rogue.title() and player_spec == subtlety:
+        gear_list = []
+        player_spec = session.get(rogue_specs[2])
+        player_spec.html.render(timeout=60)
+        player_spec = BeautifulSoup(player_spec.html.html, 'html.parser')
+        for gear in player_spec.findAll('a', class_="gear-planner-slots-group-slot-link q4"):
+            gear_list.append(gear.text)
+
+        worksheet.update('D3:D19', [[gear_list[0]], [gear_list[1]], [gear_list[2]], [gear_list[3]], [gear_list[4]],
+                                    [gear_list[5]], [gear_list[6]], [gear_list[7]], [gear_list[8]], [gear_list[9]],
+                                    [gear_list[10]], [gear_list[11]], [gear_list[12]], [gear_list[13]],
+                                    [gear_list[14]], [gear_list[15]], [gear_list[16]]])
 
 
 def initial_sheet_setup():
@@ -601,14 +759,17 @@ def initial_sheet_setup():
                               ['Wrist'], ['Hands'], ['Waist'], ['Legs'], ['Feet'],
                               ['Ring 1'], ['Ring 2'], ['Trinket 1'], ['Trinket 2'], ['Main Hand'],
                               ['Off-Hand'], ['Ranged']])
-        else:
-            pass
+        pass
+
         match x.title():
             case 'Rogue':
                 get_values = worksheet.get('A2:D2') and worksheet.get('A1')
                 if not get_values:
-                    format_cells(worksheet, rogue.title(), 3)
-                    pass
+                    format_cells(worksheet, x.title(), 3)
+                pass
+                # populate_sheet(worksheet, x.title(), assassination)
+                # populate_sheet(worksheet, x.title(), combat)
+                # populate_sheet(worksheet, x.title(), subtlety)
             case 'Shaman':
                 get_values = worksheet.get('A2:D2') and worksheet.get('A1')
                 if not get_values:
@@ -634,6 +795,9 @@ def initial_sheet_setup():
                 if not get_values:
                     format_cells(worksheet, hunter.title(), 4)
                 pass
+                populate_sheet(worksheet, x.title(), beast_mastery)
+                populate_sheet(worksheet, x.title(), marksmanship)
+                populate_sheet(worksheet, x.title(), survival)
             case 'Druid':
                 get_values = worksheet.get('A2:E2') and worksheet.get('A1')
                 if not get_values:
@@ -650,7 +814,6 @@ def initial_sheet_setup():
                     format_cells(worksheet, warlock.title(), 5)
                 pass
             case 'Mage':
-                print('mage')
                 get_values = worksheet.get('A2:F2') and worksheet.get('A1')
                 if not get_values:
                     format_cells(worksheet, mage.title(), 5)
