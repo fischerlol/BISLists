@@ -1,2 +1,4 @@
 beautifulsoup4==4.11.1
 requests_html==0.10.0
+gspread~=5.7.2
+bs4~=0.0.1

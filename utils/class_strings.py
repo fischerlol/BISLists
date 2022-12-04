@@ -7,4 +7,36 @@ priest, discipline, holy, shadow = 'priest', 'discipline', 'holy', 'shadow'
 paladin, protection, retribution = 'paladin', 'protection', 'retribution'
 warrior, arms, fury = 'warrior', 'arms', 'fury'
 mage, arcane, fire, frost = 'mage', 'arcane', 'fire', 'frost'
-death_knight, blood, unholy = 'death Knight', 'blood', 'unholy'
+death_knight, blood, unholy = 'death knight', 'blood', 'unholy'
+
+all_classes = [
+    rogue,
+    shaman,
+    priest,
+    paladin,
+    death_knight,
+    hunter,
+    druid,
+    warrior,
+    warlock,
+    mage
+]
+
+classes_3 = [
+    rogue,
+    shaman,
+    priest,
+    paladin,
+    death_knight
+]
+
+classes_4 = [
+    hunter,
+    druid,
+    warrior
+]
+
+classes_5 = [
+    warlock,
+    mage
+]
