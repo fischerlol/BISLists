@@ -15,8 +15,8 @@ def menu():
 
     match choice:
         case '1':
-            #scrape_wowhead_list(hunter)
-            #scrape_wowhead_list(shaman)
+            scrape_wowhead_list(hunter)
+            scrape_wowhead_list(shaman)
             scrape_wowhead_list(warlock)
             menu()
         case '2':
