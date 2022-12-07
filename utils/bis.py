@@ -98,4 +98,3 @@ def scrape_wowhead_list(player_class):
         get_list(warlock_destruction_spec, 'warlock_destruction.txt')
 
     print()
-
