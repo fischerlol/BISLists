@@ -15,9 +15,11 @@ def menu():
 
     match choice:
         case '1':
-            scrape_wowhead_list(hunter)
-            scrape_wowhead_list(shaman)
-            scrape_wowhead_list(warlock)
+            # scrape_wowhead_list(hunter)
+            # scrape_wowhead_list(shaman)
+            # scrape_wowhead_list(warlock)
+            scrape_wowhead_list(paladin)
+            scrape_wowhead_list(mage)
             menu()
         case '2':
             print('\ntwo\n')

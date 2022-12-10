@@ -31,9 +31,9 @@ warrior_arms_spec = ['https://www.wowhead.com/wotlk/guide/classes/warrior/arms/d
 warrior_fury_spec = ['https://www.wowhead.com/wotlk/guide/classes/warrior/fury/dps-bis-gear-pve-phase-1']
 protection_protection_spec = ['https://www.wowhead.com/wotlk/guide/classes/warrior/protection/tank-bis-gear-pve-phase-1']
 
-arcane_mage_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/arcane/dps-bis-gear-pve-phase-1']
-fire_mage_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/fire/dps-bis-gear-pve-phase-1']
-frost_mage_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/frost/dps-bis-gear-pve-phase-1']
+mage_arcane_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/arcane/dps-bis-gear-pve-phase-1']
+mage_fire_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/fire/dps-bis-gear-pve-phase-1']
+mage_frost_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/frost/dps-bis-gear-pve-phase-1']
 
 death_knight_blood_spec = ['https://www.wowhead.com/wotlk/guide/classes/death-knight/blood/tank-bis-gear-pve-phase-1']
 death_knight_frost_spec = ['https://www.wowhead.com/wotlk/guide/classes/death-knight/frost/dps-bis-gear-pve-phase-1']
