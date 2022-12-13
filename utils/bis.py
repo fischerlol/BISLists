@@ -1,152 +1,217 @@
 import os
 from utils.class_spec_strings import *
-from utils.class_strings import *
 from utils.item_slot_strings import *
 from requests_html import HTMLSession
 from bs4 import BeautifulSoup
 
 
-def check_local():
-    check_local.is_same = True
+class MyClass:
+    def __init__(self):
+        self.is_same_local_and_remote = None
+
+    def check_local(self):
+        self.is_same_local_and_remote = True
 
 
-def compare_lists(list_1, file):
-    check_local()
-    list_two = []
+# Instantiate a MyClass object
+my_class = MyClass()
 
-    with open('local/' + str(file), 'r') as file:
-        for line in file:
-            stripped_line = line.strip()
-            list_two.append(stripped_line)
+# Set the is_same_local_and_remote attribute for this instance
+my_class.is_same_local_and_remote = True
+
+
+def compare_lists(local_list, local_file):
+    with open('local/' + str(local_file), 'r') as local_file:
+        remote_list = [line.strip() for line in local_file]
 
     illegal_chars = ['[', ']', '\\', "'", '"']
-    list_one = ''.join(str(list_1))
-    list_two = ''.join(str(list_two))
-    for characters in illegal_chars:
-        list_one = list_one.replace(characters, '')
-        list_two = list_two.replace(characters, '')
+    local_list = ''.join(str(local_list))
+    remote_list = ''.join(str(remote_list))
 
-    if len(list_one) != len(list_two):
-        check_local.is_same = False
-    file.close()
+    for characters in illegal_chars:
+        local_list = local_list.replace(characters, '')
+        remote_list = remote_list.replace(characters, '')
+
+    if len(local_list) != len(remote_list):
+        my_class.is_same_local_and_remote = False
+    else:
+        my_class.is_same_local_and_remote = True
 
 
 def create_empty_file(file):
     file_name = str(file)
-    path = 'local/' + str(file)
+    file_path = 'local/{}'.format(file)
 
-    file_exists = os.path.exists(path)
+    file_exists = os.path.exists(file_path)
     if file_exists is False:
-        file = open('local/' + str(file), 'w')
-        print(file_name.capitalize(), 'does not exist, Creating now...', end='')
-        print('[Done!]')
-        file.close()
+        with open(file_path, 'w') as file:
+            print(file_name.capitalize(), 'does not exist, Creating now...', end='')
+            print('[Done!]')
 
 
-def create_file(player_spec, gear_list):
+def write_to_file(player_spec, remote_gear_list):
     illegal_chars = ['[', ']']
-    list_x = ''.join(str(gear_list))
+    remote_gear_list = ''.join(str(remote_gear_list))
     for characters in illegal_chars:
-        list_x = list_x.replace(characters, '')
+        remote_gear_list = remote_gear_list.replace(characters, '')
     with open('local/' + str(player_spec), 'w') as file:
-        file.write(list_x)
+        file.write(remote_gear_list)
     file.close()
 
 
-def remove_from_list(list_1, list_2, keep_set):
-    count = 0
-    for x in list_1:
-        count += 1
-        print('item:', [x], 'slot:', count - 1)
-    """takes items out of list_1 and list_2 depending on keep_set"""
-    match keep_set:
-        case 1:
-            if len(list_1) % 2 == 0:
-                del list_1[set_2_start[0]:set_2_end[0]]
-                del list_2[set_2_start[0]:set_2_end[0]]
-            if len(list_1) % 3 == 0:
-                del list_1[set_2_start[0]:set_2_end[0]]
-                del list_2[set_2_start[0]:set_2_end[0]]
-                del list_1[set_3_start[0]:set_3_end[0]]
-                del list_2[set_3_start[0]:set_3_end[0]]
-        case 2:
-            if len(list_1) % 1 == 0:
-                del list_1[set_1_start[0]:set_1_end[0]]
-                del list_2[set_1_start[0]:set_1_end[0]]
-            if len(list_1) % 3 == 0:
-                del list_1[set_3_start[0]:set_3_end[0]]
-                del list_2[set_3_start[0]:set_3_end[0]]
-        case 3:
-            if len(list_1) % 1 == 0:
-                del list_1[set_1_start[0]:set_1_end[0]]
-                del list_2[set_1_start[0]:set_1_end[0]]
-            if len(list_1) % 2 == 0:
-                del list_1[set_2_start[0]:set_2_end[0]]
-                del list_2[set_2_start[0]:set_2_end[0]]
+def remove_from_list(local_list, remote_list, keep_set):
+    # Calculate the number of sets in the local list
+    num_sets = len(local_list) // 16
+    if len(local_list) % 16 == 0:
+        num_sets -= 1
+
+    # Calculate the number of elements to remove from the start of the list
+    num_to_remove = (keep_set - 1) * 16
+
+    # If the local list has 17 elements per set, add one to the number of elements to remove
+    # to account for the extra element in the first set
+    if num_sets == keep_set:
+        num_to_remove += 1
+
+    # Remove the elements from the start of the local and remote lists
+    for i in range(num_to_remove):
+        del local_list[0]
+        del remote_list[0]
 
 
-def generate_list(parser, list_1, list_2):
+def generate_list(parser, local_list, remote_list):
     """generates a list of epic items into local list_1 and remote list_2"""
     for gear in parser.findAll('a', class_="gear-planner-slots-group-slot-link q4"):
-        list_1.append(gear.text)
-        list_2.append(gear.text)
+        local_list.append(gear.text)
+        remote_list.append(gear.text)
 
 
-def bis_list(player_spec, file):
-    check_local()
-    epic_list, wowhead_list = [], []
+def bis_list(player_spec, local_file):
+    local_list, remote_list = [], []
     session = HTMLSession()
     spec = session.get(player_spec[0])
     spec.html.render(timeout=60)
     parser = BeautifulSoup(spec.html.html, 'html.parser')
 
-    if player_spec == paladin_holy_spec:
-        generate_list(parser, epic_list, wowhead_list)
-        remove_from_list(epic_list, wowhead_list, keep_set=2)
+    # Concatenate the strings in the player spec list to create a unique identifier for the player spec
+    player_spec_id = "".join(player_spec)
 
-    elif player_spec == paladin_protection_spec:
-        pass
+    # Define a dictionary that maps player spec identifiers (as strings) to the corresponding sets of items to keep
+    sets_to_keep = {
+        "".join(hunter_beast_mastery_spec): None,
+        "".join(hunter_marksmanship_spec): None,
+        "".join(hunter_survival_spec): 2,
+        "".join(shaman_elemental_spec): None,
+        "".join(shaman_enhancement_spec): None,
+        "".join(shaman_restoration_spec): None,
+        "".join(warlock_affliction_spec): 2,
+        "".join(warlock_demonology_spec): None,
+        "".join(warlock_destruction_spec): 2,
+        "".join(paladin_holy_spec): 2,
+        "".join(paladin_protection_spec): None,
+        "".join(paladin_retribution_spec): 2,
+        "".join(mage_arcane_spec): 2,
+        "".join(mage_fire_spec): None,
+        "".join(mage_frost_spec): None,
+        "".join(rogue_assassination_spec): None,
+        "".join(rogue_combat_spec): None,
+        "".join(rogue_subtlety_spec): None,
+        "".join(druid_balance_spec): 1,
+        "".join(druid_feral_cat_spec): None,
+        "".join(druid_feral_bear_spec): 1,
+        "".join(druid_restoration_spec): None,
+        "".join(warrior_arms_spec): 2,
+        "".join(warrior_fury_spec): 2,
+        "".join(warrior_protection_spec): None,
+        "".join(priest_discipline_spec): 2,
+        "".join(priest_holy_spec): 2,
+        "".join(priest_shadow_spec): None,
+        "".join(death_knight_blood_spec): None,
+        "".join(death_knight_frost_spec): None,
+        "".join(death_knight_unholy_spec): None
+    }
 
-    elif player_spec == paladin_retribution_spec:
-        pass
+    # Iterate over the items in the sets_to_keep dictionary
+    for spec, keep_set in sets_to_keep.items():
+        # If the spec matches the input player spec identifier
+        if spec == player_spec_id:
+            # Call the generate_list function
+            generate_list(parser, local_list, remote_list)
+            # If the keep_set is not None, call the remove_from_list function
+            if keep_set is not None:
+                remove_from_list(local_list, remote_list, keep_set=keep_set)
 
-    elif player_spec == mage_arcane_spec:
-        generate_list(parser, epic_list, wowhead_list)
-        remove_from_list(epic_list, wowhead_list, keep_set=2)
+    create_empty_file(local_file)
+    compare_lists(remote_list, local_file)
 
-    create_empty_file(file)
-    compare_lists(wowhead_list, file)
-
-    if check_local.is_same is False:
-        print(file.capitalize(), 'is different to wowhead. Updating now...', end='')
-        create_file(file, epic_list)
+    if my_class.is_same_local_and_remote is False:
+        print(local_file.capitalize(), 'is different to wowhead. Updating now...', end=' ')
+        write_to_file(local_file, local_list)
         print('[Done!]')
-    else:
-        print(file.capitalize(), 'is already up to date.')
+    if my_class.is_same_local_and_remote is True:
+        print(local_file.capitalize(), 'is already up to date.')
 
 
 def scrape_wowhead_list(player_class):
-    if player_class == hunter:
-        bis_list(hunter_beast_mastery_spec, 'hunter_beast_mastery.txt')
-        bis_list(hunter_marksmanship_spec, 'hunter_marksmanship.txt')
-        bis_list(hunter_survival_spec, 'hunter_survival.txt')
+    # Define a dictionary that maps player classes to lists of spec URLs and names
+    player_class_urls = {
+        'hunter': [
+            (hunter_beast_mastery_spec, 'hunter_beast_mastery'),
+            (hunter_marksmanship_spec, 'hunter_marksmanship'),
+            (hunter_survival_spec, 'hunter_survival')
+        ],
+        'shaman': [
+            (shaman_elemental_spec, 'shaman_elemental'),
+            (shaman_enhancement_spec, 'shaman_enhancement'),
+            (shaman_restoration_spec, 'shaman_restoration')
+        ],
+        'warlock': [
+            (warlock_affliction_spec, 'warlock_affliction'),
+            (warlock_demonology_spec, 'warlock_demonology'),
+            (warlock_destruction_spec, 'warlock_destruction')
+        ],
+        'paladin': [
+            (paladin_holy_spec, 'paladin_holy'),
+            (paladin_protection_spec, 'paladin_protection'),
+            (paladin_retribution_spec, 'paladin_retribution')
+        ],
+        'mage': [
+            (mage_arcane_spec, 'mage_arcane'),
+            (mage_fire_spec, 'mage_fire'),
+            (mage_frost_spec, 'mage_frost')
+        ],
+        'rogue': [
+            (rogue_assassination_spec, 'rogue_assassination'),
+            (rogue_combat_spec, 'rogue_combat'),
+            (rogue_subtlety_spec, 'rogue_subtlety')
+        ],
+        'druid': [
+            (druid_balance_spec, 'druid_balance'),
+            (druid_feral_cat_spec, 'druid_feral_cat'),
+            (druid_feral_bear_spec, 'druid_feral_bear'),
+            (druid_restoration_spec, 'druid_restoration')
+        ],
+        'warrior': [
+            (warrior_arms_spec, 'warrior_arms'),
+            (warrior_fury_spec, 'warrior_fury'),
+            (warrior_protection_spec, 'warrior_protection'),
+        ],
+        'priest': [
+            (priest_discipline_spec, 'priest_discipline'),
+            (priest_holy_spec, 'priest_holy'),
+            (priest_shadow_spec, 'priest_shadow'),
+        ],
+        'death_knight': [
+            (death_knight_blood_spec, 'death_knight_blood'),
+            (death_knight_frost_spec, 'death_knight_frost'),
+            (death_knight_unholy_spec, 'death_knight_unholy'),
+        ]
 
-    if player_class == shaman:
-        bis_list(shaman_elemental_spec, 'shaman_elemental.txt')
-        bis_list(shaman_enhancement_spec, 'shaman_enhancement.txt')
-        bis_list(shaman_restoration_spec, 'shaman_restoration.txt')
+    }
 
-    if player_class == warlock:
-        bis_list(warlock_affliction_spec, 'warlock_affliction.txt')
-        bis_list(warlock_demonology_spec, 'warlock_demonology.txt')
-        bis_list(warlock_destruction_spec, 'warlock_destruction.txt')
+    # Get the list of spec URLs and names for the given player class
+    spec_urls = player_class_urls[player_class]
 
-    if player_class == paladin:
-        bis_list(paladin_holy_spec, 'paladin_holy.txt')
-        bis_list(paladin_protection_spec, 'paladin_protection.txt')
-        bis_list(paladin_retribution_spec, 'paladin_retribution.txt')
-
-    if player_class == mage:
-        bis_list(mage_arcane_spec, 'mage_arcane.txt')
-
-    print()
+    # Iterate over the spec URLs and names and call the bis_list function on each one
+    for spec_url, spec_name in spec_urls:
+        bis_list(spec_url, f"{spec_name}.txt")

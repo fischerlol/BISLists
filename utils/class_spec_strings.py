@@ -15,8 +15,8 @@ shaman_enhancement_spec = ['https://www.wowhead.com/wotlk/guide/classes/shaman/e
 shaman_restoration_spec = ['https://www.wowhead.com/wotlk/guide/classes/shaman/restoration/healer-bis-gear-pve-phase-1']
 
 druid_balance_spec = ['https://www.wowhead.com/wotlk/guide/classes/druid/balance/dps-bis-gear-pve-phase-1']
-druid_cat_spec = ['https://www.wowhead.com/wotlk/guide/classes/druid/feral/dps-bis-gear-pve-phase-1']
-druid_bear_spec = ['https://www.wowhead.com/wotlk/guide/classes/druid/feral/tank-bis-gear-pve-phase-1']
+druid_feral_cat_spec = ['https://www.wowhead.com/wotlk/guide/classes/druid/feral/dps-bis-gear-pve-phase-1']
+druid_feral_bear_spec = ['https://www.wowhead.com/wotlk/guide/classes/druid/feral/tank-bis-gear-pve-phase-1']
 druid_restoration_spec = ['https://www.wowhead.com/wotlk/guide/classes/druid/restoration/healer-bis-gear-pve-phase-1']
 
 priest_discipline_spec = ['https://www.wowhead.com/wotlk/guide/classes/priest/discipline/healer-bis-gear-pve-phase-1']
@@ -29,7 +29,7 @@ paladin_retribution_spec = ['https://www.wowhead.com/wotlk/guide/classes/paladin
 
 warrior_arms_spec = ['https://www.wowhead.com/wotlk/guide/classes/warrior/arms/dps-bis-gear-pve-phase-1']
 warrior_fury_spec = ['https://www.wowhead.com/wotlk/guide/classes/warrior/fury/dps-bis-gear-pve-phase-1']
-protection_protection_spec = ['https://www.wowhead.com/wotlk/guide/classes/warrior/protection/tank-bis-gear-pve-phase-1']
+warrior_protection_spec = ['https://www.wowhead.com/wotlk/guide/classes/warrior/protection/tank-bis-gear-pve-phase-1']
 
 mage_arcane_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/arcane/dps-bis-gear-pve-phase-1']
 mage_fire_spec = ['https://www.wowhead.com/wotlk/guide/classes/mage/fire/dps-bis-gear-pve-phase-1']
