@@ -9,3 +9,33 @@ warrior, warrior_arms, warrior_fury, warrior_protection = 'warrior', 'arms', 'fu
 mage, mage_arcane, mage_fire, mage_frost = 'mage', 'arcane', 'fire', 'frost'
 death_knight, dk_blood, dk_frost, dk_unholy = 'death knight', 'blood', 'frost', 'unholy'
 
+classes_3 = [
+    rogue,
+    shaman,
+    priest,
+    paladin,
+    death_knight
+]
+
+classes_4 = [
+    hunter,
+    druid,
+    warrior
+]
+
+classes_5 = [
+    warlock,
+    mage
+]
+
+all_classes = [
+    'death knight',
+    'druid',
+    'hunter',
+    'mage',
+    'paladin',
+    'priest',
+    'rogue',
+    'shaman',
+    'warlock',
+    'warrior']

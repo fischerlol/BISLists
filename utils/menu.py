@@ -1,4 +1,5 @@
 from utils.bis import *
+from utils.sheet import *
 from utils.class_strings import *
 
 
@@ -16,23 +17,24 @@ def menu():
 
     match choice:
         case '1':
-            #scrape_wowhead_list(hunter)
-            #scrape_wowhead_list(shaman)
-            #scrape_wowhead_list(warlock)
-            #scrape_wowhead_list(paladin)
-            #scrape_wowhead_list(mage)
-            #scrape_wowhead_list(rogue)
-            #scrape_wowhead_list(druid)
-            scrape_wowhead_list(warrior)
-            #scrape_wowhead_list(priest)
-            #scrape_wowhead_list(death_knight)
+            # scrape_wowhead_list(hunter)
+            # scrape_wowhead_list(shaman)
+            # scrape_wowhead_list(warlock)
+            # scrape_wowhead_list(paladin)
+            # scrape_wowhead_list(mage)
+            # scrape_wowhead_list(rogue)
+            # scrape_wowhead_list(druid)
+            # scrape_wowhead_list(warrior)
+            # scrape_wowhead_list(priest)
+            # scrape_wowhead_list(death_knight)
             print()
             menu()
         case '2':
             print('\ntwo\n')
             menu()
         case '3':
-            print('\nthree\n')
+            initial_setup()
+            print()
             menu()
         case 'q':
             print('\nexiting program.')
