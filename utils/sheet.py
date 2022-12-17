@@ -1,6 +1,5 @@
 import time
 import gspread
-from gspread.exceptions import APIError
 from gspread_formatting import *
 from utils.class_strings import *
 from oauth2client.service_account import ServiceAccountCredentials
@@ -31,7 +30,7 @@ def create_sheets():
                         "title": classes.title(),
                         "gridProperties": {
                             "rowCount": 20,
-                            "columnCount": 40
+                            "columnCount": 4
                         }
                     }
                 }
@@ -45,7 +44,7 @@ def create_sheets():
                         "title": classes.title(),
                         "gridProperties": {
                             "rowCount": 20,
-                            "columnCount": 50
+                            "columnCount": 5
                         }
                     }
                 }
@@ -59,7 +58,7 @@ def create_sheets():
                         "title": classes.title(),
                         "gridProperties": {
                             "rowCount": 20,
-                            "columnCount": 60
+                            "columnCount": 6
                         }
                     }
                 }
