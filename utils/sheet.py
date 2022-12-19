@@ -1,7 +1,9 @@
 import time
 import gspread
+from gspread import Cell
 from gspread_formatting import *
 from utils.class_strings import *
+from utils.bis import *
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
@@ -66,49 +68,6 @@ def create_sheets():
 
     if requests:
         document.batch_update({"requests": requests})
-
-
-def equipment_slots1():
-    # List of consistent equipment slots for all classes
-    consistent_equipment_slots = ['Slot/Spec', 'Head', 'Neck', 'Shoulders', 'Back', 'Chest',
-                                  'Wrist', 'Hands', 'Waist', 'Legs', 'Feet',
-                                  'Ring 1', 'Ring 2', 'Trinket 1', 'Trinket 2', 'Main Hand',
-                                  'Off-Hand']
-
-    # Dictionary of additional equipment slots for each class
-    additional_slots_by_class = {
-        'death knight': ['Relic'],
-        'shaman': ['Totem'],
-        'paladin': ['Libram'],
-        'druid': ['Idol'],
-        'rogue': ['Ranged'],
-        'priest': ['Ranged'],
-        'hunter': ['Ranged'],
-        'warrior': ['Ranged'],
-        'warlock': ['Ranged'],
-        'mage': ['Ranged'],
-    }
-
-    for class_name in all_classes:
-        worksheet = document.worksheet(class_name.title())
-        horizontal = cellFormat(horizontalAlignment='CENTER')
-        format_cell_range(worksheet, 'A1:D20', horizontal)
-        set_column_width(worksheet, 'A', 175)
-        get_slots = worksheet.get('A3:A20')
-
-        if not get_slots:
-            # Concatenate the list of consistent equipment slots with the additional slots for this class
-            all_slots = consistent_equipment_slots + additional_slots_by_class.get(class_name, [])
-
-            # Convert the list of strings to a list of lists, with each inner list containing a single string
-            all_slots = [[slot] for slot in all_slots]
-
-            # Update the worksheet
-            worksheet.update('A2:A19', all_slots)
-            worksheet.update('A20', 'Date:')
-
-            # Pause execution for 1 second to allow API quota to reset
-            time.sleep(1)
 
 
 def equipment_slots():
@@ -251,6 +210,10 @@ def class_specializations():
         # Execute the batch update
         if requests:
             document.batch_update({"requests": requests})
+
+
+def add_local_list(worksheet, player_class, player_spec):
+    pass
 
 
 def populate_sheet():
