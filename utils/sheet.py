@@ -212,12 +212,22 @@ def class_specializations():
             document.batch_update({"requests": requests})
 
 
-def add_local_list(worksheet, player_class, player_spec):
-    pass
+def get_local_list(local_file):
+    local_list = []
+
+    with open('local/' + str(local_file), 'r') as local_file:
+        local_list = [line.strip() for line in local_file]
+    return local_list
+
+
+def add_local_list_to_google_sheets(local_list, player_class):
+    local_list = get_local_list(local_list)
+
+    worksheet = document.worksheet(player_class.title())
 
 
 def populate_sheet():
-    pass
+    add_local_list_to_google_sheets('rogue_assassination.txt', 'Rogue')
 
 
 def initial_setup():

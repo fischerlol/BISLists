@@ -30,7 +30,7 @@ def menu():
             print()
             menu()
         case '2':
-            print('\ntwo\n')
+            populate_sheet()
             menu()
         case '3':
             initial_setup()

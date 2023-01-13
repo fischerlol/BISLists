@@ -86,7 +86,7 @@ def generate_list(parser, local_list, remote_list):
         remote_list.append(gear.text)
 
 
-def bis_list(player_spec, local_file):
+def values(player_spec, local_file):
     local_list, remote_list = [], []
     session = HTMLSession()
     spec = session.get(player_spec[0])
@@ -214,4 +214,4 @@ def scrape_wowhead_list(player_class):
 
     # Iterate over the spec URLs and names and call the bis_list function on each one
     for spec_url, spec_name in spec_urls:
-        bis_list(spec_url, f"{spec_name}.txt")
+        values(spec_url, f"{spec_name}.txt")
