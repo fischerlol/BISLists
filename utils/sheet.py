@@ -1,9 +1,6 @@
-import time
 import gspread
-from gspread import Cell
 from gspread_formatting import *
 from utils.class_strings import *
-from utils.bis import *
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
@@ -213,21 +210,134 @@ def class_specializations():
 
 
 def get_local_list(local_file):
-    local_list = []
+    with open('local/' + str(local_file)) as f:
+        local_list = f.read()
 
-    with open('local/' + str(local_file), 'r') as local_file:
-        local_list = [line.strip() for line in local_file]
+    local_list = [item.strip() for item in local_list.split(',')]
+
     return local_list
 
 
-def add_local_list_to_google_sheets(local_list, player_class):
+def add_local_list_to_google_sheets(local_list, player_class, spec):
+    col_mapping = {
+        'Rogue': {
+            'Assassination': 2,
+            'Combat': 3,
+            'Subtlety': 4,
+        },
+        'Shaman': {
+            'Elemental': 2,
+            'Enhancement': 3,
+            'Restoration': 4,
+        },
+        'Priest': {
+            'Discipline': 2,
+            'Holy': 3,
+            'Shadow': 4,
+        },
+        'Paladin': {
+            'Holy': 2,
+            'Protection': 3,
+            'Retribution': 4,
+        },
+        'Death Knight': {
+            'Blood': 2,
+            'Frost': 3,
+            'Unholy': 4,
+        },
+        'Hunter': {
+            'Beast Mastery': 2,
+            'Marksmanship': 3,
+            'Survival': 4,
+        },
+        'Druid': {
+            'Balance': 2,
+            'Feral': 3,
+            'Guardian': 4,
+            'Restoration': 5,
+        },
+        'Warrior': {
+            'Arms': 2,
+            'Fury': 3,
+            'Protection': 4,
+        },
+        'Warlock': {
+            'Affliction': 2,
+            'Demonology': 3,
+            'Destruction': 4,
+        },
+        'Mage': {
+            'Arcane': 2,
+            'Fire': 3,
+            'Frost': 4,
+        }
+    }
+
+    col = col_mapping[player_class].get(spec)
+    if not col:
+        return
     local_list = get_local_list(local_list)
 
     worksheet = document.worksheet(player_class.title())
 
+    cell_updates = []
+    for i, item in enumerate(local_list):
+        item = item.replace("'", "").replace('"', '')
+        cell_updates.append(gspread.Cell(i + 3, col, value=item))
+    worksheet.update_cells(cell_updates)
+
 
 def populate_sheet():
-    add_local_list_to_google_sheets('rogue_assassination.txt', 'Rogue')
+    # rogue
+    add_local_list_to_google_sheets('rogue_assassination.txt', 'Rogue', 'Assassination')
+    add_local_list_to_google_sheets('rogue_combat.txt', 'Rogue', 'Combat')
+    add_local_list_to_google_sheets('rogue_subtlety.txt', 'Rogue', 'Subtlety')
+
+    # shaman
+    add_local_list_to_google_sheets('shaman_elemental.txt', 'Shaman', 'Elemental')
+    add_local_list_to_google_sheets('shaman_enhancement.txt', 'Shaman', 'Enhancement')
+    add_local_list_to_google_sheets('shaman_restoration.txt', 'Shaman', 'Restoration')
+
+    # priest
+    add_local_list_to_google_sheets('priest_discipline.txt', 'Priest', 'Discipline')
+    add_local_list_to_google_sheets('priest_holy.txt', 'Priest', 'Holy')
+    add_local_list_to_google_sheets('priest_shadow.txt', 'Priest', 'Shadow')
+
+    # paladin
+    add_local_list_to_google_sheets('paladin_holy.txt', 'Paladin', 'Holy')
+    add_local_list_to_google_sheets('paladin_protection.txt', 'Paladin', 'Protection')
+    add_local_list_to_google_sheets('paladin_retribution.txt', 'Paladin', 'Retribution')
+
+    # death knight
+    add_local_list_to_google_sheets('death_knight_blood.txt', 'Death Knight', 'Blood')
+    add_local_list_to_google_sheets('death_knight_frost.txt', 'Death Knight', 'Frost')
+    add_local_list_to_google_sheets('death_knight_unholy.txt', 'Death Knight', 'Unholy')
+
+    # hunter
+    add_local_list_to_google_sheets('hunter_beast_mastery.txt', 'Hunter', 'Beast Mastery')
+    add_local_list_to_google_sheets('hunter_marksmanship.txt', 'Hunter', 'Marksmanship')
+    add_local_list_to_google_sheets('hunter_survival.txt', 'Hunter', 'Survival')
+
+    # druid
+    add_local_list_to_google_sheets('druid_balance.txt', 'Druid', 'Balance')
+    add_local_list_to_google_sheets('druid_balance.txt', 'Druid', 'Feral')
+    add_local_list_to_google_sheets('druid_balance.txt', 'Druid', 'Guardian')
+    add_local_list_to_google_sheets('druid_balance.txt', 'Druid', 'Restoration')
+
+    # warrior
+    add_local_list_to_google_sheets('warrior_arms.txt', 'Warrior', 'Arms')
+    add_local_list_to_google_sheets('warrior_fury.txt', 'Warrior', 'Fury')
+    add_local_list_to_google_sheets('warrior_protection.txt', 'Warrior', 'Protection')
+
+    # warlock
+    add_local_list_to_google_sheets('warlock_affliction.txt', 'Warlock', 'Affliction')
+    add_local_list_to_google_sheets('warlock_demonology.txt', 'Warlock', 'Demonology')
+    add_local_list_to_google_sheets('warlock_destruction.txt', 'Warlock', 'Destruction')
+
+    # mage
+    add_local_list_to_google_sheets('mage_arcane.txt', 'Mage', 'Arcane')
+    add_local_list_to_google_sheets('mage_fire.txt', 'Mage', 'Fire')
+    add_local_list_to_google_sheets('mage_frost.txt', 'Mage', 'Frost')
 
 
 def initial_setup():

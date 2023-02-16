@@ -17,16 +17,16 @@ def menu():
 
     match choice:
         case '1':
-            # scrape_wowhead_list(hunter)
-            # scrape_wowhead_list(shaman)
-            # scrape_wowhead_list(warlock)
-            # scrape_wowhead_list(paladin)
-            # scrape_wowhead_list(mage)
-            # scrape_wowhead_list(rogue)
-            # scrape_wowhead_list(druid)
-            # scrape_wowhead_list(warrior)
-            # scrape_wowhead_list(priest)
-            # scrape_wowhead_list(death_knight)
+            scrape_wowhead_list(hunter)
+            scrape_wowhead_list(shaman)
+            scrape_wowhead_list(warlock)
+            scrape_wowhead_list(paladin)
+            scrape_wowhead_list(mage)
+            scrape_wowhead_list(rogue)
+            scrape_wowhead_list(druid)
+            scrape_wowhead_list(warrior)
+            scrape_wowhead_list(priest)
+            scrape_wowhead_list(death_knight)
             print()
             menu()
         case '2':
